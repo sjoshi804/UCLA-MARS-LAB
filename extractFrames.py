@@ -13,7 +13,7 @@ def FrameCapture(path):
 
 	# checks whether frames were extracted 
 	success = 1
-	framesToSkip = 0 #change this to change granularity of extraction
+	framesToSkip = 0 #change this to change granularity of extraction - 0 highest granularity
 	skipCounter = framesToSkip
 
 	while success: 
