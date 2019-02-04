@@ -13,15 +13,22 @@ def FrameCapture(path):
 
 	# checks whether frames were extracted 
 	success = 1
+	framesToSkip = 0 #change this to change granularity of extraction
+	skipCounter = framesToSkip
 
 	while success: 
 
 		# vidObj object calls read 
 		# function extract frames 
 		success, image = vidObj.read() 
-
-		# Saves the frames with frame-count 
-		cv2.imwrite("frame%d.jpg" % count, image) 
+		
+		#See if this is a relevant frame or one to be skipped - modify granularity of extraction
+		if skipCounter == 0:
+			# Saves the frames with frame-count 
+			cv2.imwrite("frame%d.jpg" % count, image)
+			skipCounter = framesToSkip
+		else:
+			skipCounter -= 1
 
 		count += 1
 
@@ -29,4 +36,4 @@ def FrameCapture(path):
 if __name__ == '__main__': 
 
 	# Calling the function 
-	FrameCapture("C:\\Users\\Admin\\PycharmProjects\\project_1\\openCV.mp4") 
+	FrameCapture("../stockFaceFootage.mp4") 
