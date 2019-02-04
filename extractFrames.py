@@ -20,12 +20,14 @@ def FrameCapture(path):
 
 		# vidObj object calls read 
 		# function extract frames 
-		success, image = vidObj.read() 
-		
+		success, image = vidObj.read()
+		greyscaleImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+		croppedImage = greyscaleImage[0:720, 400:880]
+		finalImage = cv2.resize(croppedImage, None, fx = 1/3, fy = 1/3, interpolation=cv2.INTER_AREA)
 		#See if this is a relevant frame or one to be skipped - modify granularity of extraction
 		if skipCounter == 0:
-			# Saves the frames with frame-count 
-			cv2.imwrite("frame%d.jpg" % count, image)
+		# Saves the frames with frame-count 
+			cv2.imwrite("sampleFrames/frame%d.pgm" % count, finalImage)
 			skipCounter = framesToSkip
 		else:
 			skipCounter -= 1
