@@ -23,7 +23,7 @@ def FrameCapture(path):
 		success, image = vidObj.read()
 		greyscaleImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 		croppedImage = greyscaleImage[0:720, 160:1120]
-		finalImage = cv2.resize(croppedImage, (240, 320), interpolation=cv2.INTER_AREA)
+		finalImage = cv2.resize(croppedImage, (320, 240), interpolation=cv2.INTER_AREA)
 		#See if this is a relevant frame or one to be skipped - modify granularity of extraction
 		if skipCounter == 0:
 		# Saves the frames with frame-count 
