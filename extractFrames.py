@@ -1,41 +1,20 @@
-# Program To Read video 
-# and Extract Frames 
-import cv2 
+import numpy as np
+import cv2
 
-# Function to extract frames 
-def FrameCapture(path): 
-	
-	# Path to video file 
-	vidObj = cv2.VideoCapture(path) 
+cap = cv2.VideoCapture('../stockFaceFootage.mp4')
+count = 0
+while (cap.isOpened()):
+	ret, frame = cap.read()
+	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	crop = gray[0:720, 160:1120]
+	final = cv2.resize(crop, (320, 240), interpolation=cv2.INTER_AREA)
+	#cv2.imshow('frame',final)
+	name = 'frame' + str(count) + '.pgm'
+	cv2.imwrite(name, final)
+	#cv2.imwrite("sampleFrames/frame%d.pgm" % count, final)
+	count += 1
+	if cv2.waitKey(1) & 0xFF == ord('q'):
+		break
 
-	# Used as counter variable 
-	count = 0
-
-	# checks whether frames were extracted 
-	success = 1
-	framesToSkip = 0 #change this to change granularity of extraction - 0 highest granularity
-	skipCounter = framesToSkip
-
-	while success: 
-
-		# vidObj object calls read 
-		# function extract frames 
-		success, image = vidObj.read()
-		greyscaleImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-		croppedImage = greyscaleImage[0:720, 160:1120]
-		finalImage = cv2.resize(croppedImage, (320, 240), interpolation=cv2.INTER_AREA)
-		#See if this is a relevant frame or one to be skipped - modify granularity of extraction
-		if skipCounter == 0:
-		# Saves the frames with frame-count 
-			cv2.imwrite("sampleFrames/frame%d.pgm" % count, finalImage)
-			skipCounter = framesToSkip
-		else:
-			skipCounter -= 1
-
-		count += 1
-
-# Driver Code 
-if __name__ == '__main__': 
-
-	# Calling the function 
-	FrameCapture("../stockFaceFootage.mp4") 
+cap.release()
+cv2.destroyAllWindows()
