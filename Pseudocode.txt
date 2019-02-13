@@ -1,0 +1,14 @@
+Pseudocode for pure c++ version of klt + vj face tracking:
+- assume input is the set of all frames in the video labelled 1 ... n
+
+Navie Method:
+for every frame i:
+    if i (mod5) == 0: // 5 can be changed to the granularity that experimentally works best
+        run vj and detect faces
+        for every face:
+            run KLTSelectGoodFeaturesToTrack on the bounding box around said face
+    else:
+        for every face:
+            using the previous feature list (refer to tracking in an image sequence from klt manual)
+            find the position of the features 
+    

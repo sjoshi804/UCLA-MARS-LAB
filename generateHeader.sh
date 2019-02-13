@@ -1,6 +1,7 @@
 #!/bin/bash
-mv frame*.pgm sampleFrames
-for i in `seq 0 435`;
+for i in `seq 350 360`;
 do
-    ./gen_dataset/genImage sampleFrames/frame$i.pgm headerOutput/frame$i.h
+    cp frame$i.pgm vj_cpp/Face.pgm 
+    ./vj_cpp/vj
+    mv vj_cpp/Output.pgm outputFrames/frame$i.pgm  
 done

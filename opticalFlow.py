@@ -2,7 +2,7 @@
 import numpy as np
 import cv2 as cv
 cap = cv.VideoCapture('../stockFaceFootage.mp4')
-# params for ShiTomasi corner detection
+# params  for ShiTomasi corner detection
 feature_params = dict( maxCorners = 100,
                        qualityLevel = 0.3,
                        minDistance = 7,
