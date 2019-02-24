@@ -33,12 +33,17 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h> 
+#include <fcntl.h>
+#include <errno.h>
 #include "image.h"
 #include "stdio-wrapper.h"
 #include "haar.h"
 
 #define INPUT_FILENAME "Face.pgm"
 #define OUTPUT_FILENAME "Output.pgm"
+#define FACE_BOUNDARIES_FILENAME "FaceBoundaries.txt"
 
 using namespace std;
 
@@ -92,9 +97,18 @@ int main (int argc, char *argv[])
 
 	result = detectObjects(image, minSize, maxSize, cascade, scaleFactor, minNeighbours);
 
+	//Open file for writing face boundaries
+	int faceBoundary_FD = creat(FACE_BOUNDARIES_FILENAME, S_IRWXU);
+	if (faceBoundary_FD == -1)
+	{
+		fprintf(stderr, "Error opening file: %d", errno);
+		exit(1);
+	}
+
 	for(i = 0; i < result.size(); i++ )
 	{
 		MyRect r = result[i];
+		dprintf(faceBoundary_FD, "Face %d: starts at (%d, %d), width = %d, height = %d\n", i, r.x, r.y, r.width, r.height);
 		drawRectangle(image, r);
 	}
 
