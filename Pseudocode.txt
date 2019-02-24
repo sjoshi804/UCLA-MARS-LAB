@@ -1,14 +1,31 @@
 Pseudocode for pure c++ version of klt + vj face tracking:
-- assume input is the set of all frames in the video labelled 1 ... n
+- assume input is the a vector of all frames in the video labelled 1 ... n
 
-Navie Method:
-for every frame i:
-    if i (mod5) == 0: // 5 can be changed to the granularity that experimentally works best
-        run vj and detect faces
-        for every face:
-            run KLTSelectGoodFeaturesToTrack on the bounding box around said face
-    else:
-        for every face:
-            using the previous feature list (refer to tracking in an image sequence from klt manual)
-            find the position of the features 
-    
+Basic approach: 
+TrackFaces (vector<frames> video):
+    HashTable<Face, Set<Features>> FaceFeatures
+    for every frame i:
+        if i (mod (n)) == 0: // n can be changed depending on how often new faces enter the video relative to frame #
+            FaceFeatures = new HashTable(Face, Set<Features>)
+            run vj and detect faces by writing a bounding box around the region of a face
+            for every face j (bounding box j):
+                currentFeatures = KLTSelectGoodFeaturesToTrack on the bounding box j
+                FaceFeatures[Face j] = currentFeatures
+        else: (Two Strategies exist for this step)
+            Strategy1:
+                For every face j in FaceFeatues:
+                    Run KLTTrackFeatures() for the feature list FaceFeatures[face j]
+                    Write new bounding box to frame that encompasses all / x% of Features
+                    Remove the features not present in this new bounding box from the set FaceFeatures[face j] // optional?
+            Strategy2: 
+                Run KLTTrackFeatures for the entire feature list
+                Update the positions for all features found to the position in frame i
+                    and remove features whose position is not updated // optional?
+                For every face j in FaceFeatures:
+                    Write new bounding box to frame that encompasses all / x% of Features
+
+More optimizations can be done by not running viola jones in entire frame rather in 
+a modified version of the frame where known locations of faces are zero-ed out to avoid re-identifying faces
+that have been identified and tracked to a valid position in the frame. 
+
+
