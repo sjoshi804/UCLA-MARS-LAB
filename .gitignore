@@ -1,9 +1,9 @@
 frame*.pgm
 frame*.h
-feat*.ppm
-example1
-example2
-example3
-example4
-example5
-libklt.a
+klt/feat*.ppm
+klt/example1
+klt/example2
+klt/example3
+klt/example4
+klt/example5
+klt/libklt.a
