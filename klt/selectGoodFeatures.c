@@ -300,7 +300,9 @@ void _KLTSelectGoodFeatures(
   int ncols, 
   int nrows,
   KLT_FeatureList featurelist,
-  selectionMode mode)
+  selectionMode mode,
+  KLT_FaceList *faces
+  )
 {
   _KLT_FloatImage floatimg, gradx, grady;
   int window_hw, window_hh;
@@ -393,36 +395,42 @@ void _KLTSelectGoodFeatures(
 		
     /* For most of the pixels in the image, do ... */
     ptr = pointlist;
-    for (y = bordery ; y < nrows - bordery ; y += tc->nSkippedPixels + 1)
-      for (x = borderx ; x < ncols - borderx ; x += tc->nSkippedPixels + 1)  {
+    //Set bounds for tracking based on face boundaries
+    for (i = 0; i < faces->nFaces; i++)
+    {
+      VJ_Face currentFace = faces->faceList[i];
+      for (y = currentFace.startY; y < currentFace.limitY; y += tc->nSkippedPixels + 1)
+        for (x = currentFace.startX ; x < currentFace.limitX ; x += tc->nSkippedPixels + 1)  {
 
-        /* Sum the gradients in the surrounding window */
-        gxx = 0;  gxy = 0;  gyy = 0;
-        for (yy = y-window_hh ; yy <= y+window_hh ; yy++)
-          for (xx = x-window_hw ; xx <= x+window_hw ; xx++)  {
-            gx = *(gradx->data + ncols*yy+xx);
-            gy = *(grady->data + ncols*yy+xx);
-            gxx += gx * gx;
-            gxy += gx * gy;
-            gyy += gy * gy;
+          /* Sum the gradients in the surrounding window */
+          gxx = 0;  gxy = 0;  gyy = 0;
+          for (yy = y-window_hh ; yy <= y+window_hh ; yy++)
+            for (xx = x-window_hw ; xx <= x+window_hw ; xx++)  {
+              gx = *(gradx->data + ncols*yy+xx);
+              gy = *(grady->data + ncols*yy+xx);
+              gxx += gx * gx;
+              gxy += gx * gy;
+              gyy += gy * gy;
+            }
+
+          /* Store the trackability of the pixel as the minimum
+            of the two eigenvalues */
+          *ptr++ = x;
+          *ptr++ = y;
+          val = _minEigenvalue(gxx, gxy, gyy);
+          if (val > limit)  {
+            KLTWarning("(_KLTSelectGoodFeatures) minimum eigenvalue %f is "
+                      "greater than the capacity of an int; setting "
+                      "to maximum value", val);
+            val = (float) limit;
           }
-
-        /* Store the trackability of the pixel as the minimum
-           of the two eigenvalues */
-        *ptr++ = x;
-        *ptr++ = y;
-        val = _minEigenvalue(gxx, gxy, gyy);
-        if (val > limit)  {
-          KLTWarning("(_KLTSelectGoodFeatures) minimum eigenvalue %f is "
-                     "greater than the capacity of an int; setting "
-                     "to maximum value", val);
-          val = (float) limit;
+          *ptr++ = (int) val;
+          npoints++;
         }
-        *ptr++ = (int) val;
-        npoints++;
-      }
+    }
   }
-			
+	//TODO: Check if this is the fucntino where the features get filtered down to 100 best,
+  //and if so alter that accordingly
   /* Sort the features  */
   _sortPointList(pointlist, npoints);
 
@@ -471,10 +479,11 @@ void _KLTSelectGoodFeatures(
 
 void KLTSelectGoodFeatures(
   KLT_TrackingContext tc,
-  KLT_PixelType *img, 
-  int ncols, 
+  KLT_PixelType *img,
+  int ncols,
   int nrows,
-  KLT_FeatureList fl)
+  KLT_FeatureList fl,
+  KLT_FaceList *faces)
 {
   if (KLT_verbose >= 1)  {
     fprintf(stderr,  "(KLT) Selecting the %d best features "
@@ -483,7 +492,7 @@ void KLTSelectGoodFeatures(
   }
 
   _KLTSelectGoodFeatures(tc, img, ncols, nrows, 
-                         fl, SELECTING_ALL);
+                         fl, SELECTING_ALL, faces);
 
   if (KLT_verbose >= 1)  {
     fprintf(stderr,  "\n\t%d features found.\n", 
@@ -516,7 +525,8 @@ void KLTReplaceLostFeatures(
   KLT_PixelType *img, 
   int ncols, 
   int nrows,
-  KLT_FeatureList fl)
+  KLT_FeatureList fl,
+  KLT_FaceList *faces)
 {
   int nLostFeatures = fl->nFeatures - KLTCountRemainingFeatures(fl);
 
@@ -529,7 +539,7 @@ void KLTReplaceLostFeatures(
   /* If there are any lost features, replace them */
   if (nLostFeatures > 0)
     _KLTSelectGoodFeatures(tc, img, ncols, nrows, 
-                           fl, REPLACING_SOME);
+                           fl, REPLACING_SOME, faces);
 
   if (KLT_verbose >= 1)  {
     fprintf(stderr,  "\n\t%d features replaced.\n",

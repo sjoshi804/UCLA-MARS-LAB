@@ -121,7 +121,20 @@ typedef struct  {
   KLT_Feature **feature;
 }  KLT_FeatureTableRec, *KLT_FeatureTable;
 
+typedef struct
+{
+  int* features;
+  int startX;
+  int startY;
+  int limitX;
+  int limitY;
+} VJ_Face;
 
+typedef struct
+{
+  int nFaces;
+  VJ_Face* faceList;
+} KLT_FaceList;
 
 /*******************
  * Functions
@@ -153,7 +166,8 @@ void KLTSelectGoodFeatures(
   KLT_PixelType *img,
   int ncols,
   int nrows,
-  KLT_FeatureList fl);
+  KLT_FeatureList fl,
+  KLT_FaceList *faces);
 void KLTTrackFeatures(
   KLT_TrackingContext tc,
   KLT_PixelType *img1,
@@ -166,7 +180,8 @@ void KLTReplaceLostFeatures(
   KLT_PixelType *img,
   int ncols,
   int nrows,
-  KLT_FeatureList fl);
+  KLT_FeatureList fl,
+  KLT_FaceList *faces);
 
 /* Utilities */
 int KLTCountRemainingFeatures(
