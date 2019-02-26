@@ -441,7 +441,6 @@ void _KLTSelectGoodFeatures(
   }
 	
   /* Sort the features  */
-  printf("\n/* DEBUG */ Features: %d\n", npoints);
   _sortPointList(pointlist, npoints);
 
   /* Check tc->mindist */
