@@ -28,7 +28,7 @@ int main()
   img1 = pgmReadFile("img0.pgm", NULL, &ncols, &nrows);
   img2 = pgmReadFile("img1.pgm", NULL, &ncols, &nrows);
 
-  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl);
+  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl, NULL);
 
   printf("\nIn first image:\n");
   for (i = 0 ; i < fl->nFeatures ; i++)  {

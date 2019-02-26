@@ -37,7 +37,7 @@ int main()
   img1 = pgmReadFile("img0.pgm", NULL, &ncols, &nrows);
   img2 = (unsigned char *) malloc(ncols*nrows*sizeof(unsigned char));
 
-  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl);
+  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl, NULL);
   KLTStoreFeatureList(fl, ft, 0);
   KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, "feat0.ppm");
 

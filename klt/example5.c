@@ -4,6 +4,7 @@ Demonstrates manually tweaking the tracking context parameters.
 
 #include "pnmio.h"
 #include "klt.h"
+#include <stdlib.h>
 
 #ifdef WIN32
 int RunExample5()
@@ -18,17 +19,23 @@ int main()
   int ncols, nrows;
 
   tc = KLTCreateTrackingContext();
-  tc->mindist = 20;
-  tc->window_width  = 9;
-  tc->window_height = 9;
-  KLTChangeTCPyramid(tc, 15);
-  KLTUpdateTCBorder(tc);
   fl = KLTCreateFeatureList(nFeatures);
-
+  //TODO: make functions for initialization
+  KLT_FaceList faces;
+  faces.nFaces = 2;
+  faces.faceList = (VJ_Face*) malloc(sizeof(VJ_Face) * faces.nFaces);
+  VJ_Face face1;
+  face1.features = NULL; face1.startX = face1.startY = 10; 
+  face1.limitX = face1.limitY = 110;
+  VJ_Face face2;
+  face2.features = NULL; face2.startX = face2.startY = 110; 
+  face2.limitX = face2.limitY = 210;
+  faces.faceList[0] = face1;
+  faces.faceList[1] = face2;
   img1 = pgmReadFile("img0.pgm", NULL, &ncols, &nrows);
   img2 = pgmReadFile("img2.pgm", NULL, &ncols, &nrows);
 
-  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl);
+  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl, &faces);
 
   KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, "feat1b.ppm");
 

@@ -26,13 +26,13 @@ int main()
   img1 = pgmReadFile("img0.pgm", NULL, &ncols, &nrows);
   img2 = pgmReadFile("img1.pgm", NULL, &ncols, &nrows);
 
-  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl);
+  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl, NULL);
 
   KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, "feat1.ppm");
   KLTWriteFeatureList(fl, "feat1.txt", "%3d");
 
   KLTTrackFeatures(tc, img1, img2, ncols, nrows, fl);
-  KLTReplaceLostFeatures(tc, img2, ncols, nrows, fl);
+  KLTReplaceLostFeatures(tc, img2, ncols, nrows, fl, NULL);
 
   KLTWriteFeatureListToPPM(fl, img2, ncols, nrows, "feat2.ppm");
   KLTWriteFeatureList(fl, "feat2.txt", "%3d");
