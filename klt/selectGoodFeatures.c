@@ -42,10 +42,14 @@ typedef enum {SELECTING_ALL, REPLACING_SOME} selectionMode;
  * [a b1 b2 c d] or [a b2 b1 c d].
  */
 
-#define SWAP3(list, i, j)               \
+#define SWAP4(list, i, j)               \
 {register int *pi, *pj, tmp;            \
-     pi=list+3*(i); pj=list+3*(j);      \
+     pi=list+4*(i); pj=list+4*(j);      \
                                         \
+     tmp=*pi;    \
+     *pi++=*pj;  \
+     *pj++=tmp;  \
+                 \
      tmp=*pi;    \
      *pi++=*pj;  \
      *pj++=tmp;  \
@@ -65,36 +69,36 @@ void _quicksort(int *pointlist, int n)
 
   while (n > 1)
   {
-    SWAP3(pointlist, 0, n/2);
+    SWAP4(pointlist, 0, n/2);
     for (i = 0, j = n; ; )
     {
       do
         --j;
-      while (pointlist[3*j+2] < pointlist[2]);
+      while (pointlist[4*j+2] < pointlist[2]);
       do
         ++i;
-      while (i < j && pointlist[3*i+2] > pointlist[2]);
+      while (i < j && pointlist[4*i+2] > pointlist[2]);
       if (i >= j)
         break;
-      SWAP3(pointlist, i, j);
+      SWAP4(pointlist, i, j);
     }
-    SWAP3(pointlist, j, 0);
+    SWAP4(pointlist, j, 0);
     ln = j;
     rn = n - ++j;
     if (ln < rn)
     {
       _quicksort(pointlist, ln);
-      pointlist += 3*j;
+      pointlist += 4*j;
       n = rn;
     }
     else
     {
-      _quicksort(pointlist + 3*j, rn);
+      _quicksort(pointlist + 4*j, rn);
       n = ln;
     }
   }
 }
-#undef SWAP3
+#undef SWAP4
 
 
 /*********************************************************************/
@@ -139,10 +143,11 @@ static void _enforceMinimumDistance(
   int ncols, int nrows,        /* size of images */
   int mindist,                 /* min. dist b/w features */
   int min_eigenvalue,          /* min. eigenvalue */
-  KLT_BOOL overwriteAllFeatures)
+  KLT_BOOL overwriteAllFeatures,
+  KLT_FaceList *faces)
 {
   int indx;          /* Index into features */
-  int x, y, val;     /* Location and trackability of pixel under consideration */
+  int x, y, val, correspondingFace;     /* Location and trackability of pixel under consideration */
   uchar *featuremap; /* Boolean array recording proximity of features */
   int *ptr;
 	
@@ -172,7 +177,7 @@ static void _enforceMinimumDistance(
 
     /* If we can't add all the points, then fill in the rest
        of the featurelist with -1's */
-    if (ptr >= pointlist + 3*npoints)  {
+    if (ptr >= pointlist + 4*npoints)  {
       while (indx < featurelist->nFeatures)  {	
         if (overwriteAllFeatures || 
             featurelist->feature[indx]->val < 0) {
@@ -197,6 +202,7 @@ static void _enforceMinimumDistance(
     x   = *ptr++;
     y   = *ptr++;
     val = *ptr++;
+    correspondingFace = *ptr++;
 		
     /* Ensure that feature is in-bounds */
     assert(x >= 0);
@@ -214,6 +220,8 @@ static void _enforceMinimumDistance(
     /* If no neighbor has been selected, and if the minimum
        eigenvalue is large enough, then add feature to the current list */
     if (!featuremap[y*ncols+x] && val >= min_eigenvalue)  {
+      /* Match feature number i.e. index of feature to face */
+      faces->faceList[correspondingFace] = 
       featurelist->feature[indx]->x   = (KLT_locType) x;
       featurelist->feature[indx]->y   = (KLT_locType) y;
       featurelist->feature[indx]->val = (int) val;
@@ -337,8 +345,8 @@ void _KLTSelectGoodFeatures(
   window_hh = tc->window_height/2;
 		
   /* Create pointlist, which is a simplified version of a featurelist, */
-  /* for speed.  Contains only integer locations and values. */
-  pointlist = (int *) malloc(ncols * nrows * 3 * sizeof(int));
+  /* for speed.  Contains only integer locations, values and correspoinding face numbers. */
+  pointlist = (int *) malloc(ncols * nrows * 4 * sizeof(int));
 
   /* Create temporary images, etc. */
   if (mode == REPLACING_SOME && 
@@ -425,13 +433,14 @@ void _KLTSelectGoodFeatures(
             val = (float) limit;
           }
           *ptr++ = (int) val;
+          *ptr++ = i;
           npoints++;
         }
     }
   }
-	//TODO: Check if this is the fucntino where the features get filtered down to 100 best,
-  //and if so alter that accordingly
+	
   /* Sort the features  */
+  printf("\n/* DEBUG */ Features: %d\n", npoints);
   _sortPointList(pointlist, npoints);
 
   /* Check tc->mindist */
@@ -449,7 +458,8 @@ void _KLTSelectGoodFeatures(
     ncols, nrows,
     tc->mindist,
     tc->min_eigenvalue,
-    overwriteAllFeatures);
+    overwriteAllFeatures,
+    faces);
 
   /* Free memory */
   free(pointlist);
