@@ -33,6 +33,7 @@ typedef unsigned char KLT_PixelType;
 #define KLT_LARGE_RESIDUE    -5
 
 #include "klt_util.h" /* for affine mapping */
+#include "vector.h" /* custom vector implementation */
 
 /*******************
  * Structures
@@ -123,7 +124,7 @@ typedef struct  {
 
 typedef struct
 {
-  int* features;
+  VECTOR_OF(int) features;
   int startX;
   int startY;
   int limitX;
