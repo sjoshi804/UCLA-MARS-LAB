@@ -25,10 +25,10 @@ int main()
   faces.nFaces = 2;
   faces.faceList = (VJ_Face*) malloc(sizeof(VJ_Face) * faces.nFaces);
   VJ_Face face1;
-  face1.features = NULL; face1.startX = face1.startY = 10; 
+  VECTOR_INIT(face1.features); face1.startX = face1.startY = 10; 
   face1.limitX = face1.limitY = 110;
   VJ_Face face2;
-  face2.features = NULL; face2.startX = face2.startY = 110; 
+  VECTOR_INIT(face2.features); face2.startX = face2.startY = 110; 
   face2.limitX = face2.limitY = 210;
   faces.faceList[0] = face1;
   faces.faceList[1] = face2;
