@@ -45,6 +45,25 @@ static const int nSkippedPixels = 0;
 
 extern int KLT_verbose;
 
+/*********************************************************************
+ * VJCreateFace
+ * INPUTS
+ * startX, startY - x and y co-ordinates of top left corner of bounding box
+ * width = width of bounding box
+ * height = height of bounding box
+ * 
+ * RETURNS: 
+ * VJ_Face object initialized with the aforementioned values and an empty features vector
+ */
+//TODO: Check whether rectange specifies width/height or limits
+VJ_Face VJCreateFace(int startX, int startY, int width, int height)
+{
+  VJ_Face newFace;
+  newFace.startX = startX;
+  newFace.startY = height + startY;
+  newFace.limitX = width + startX;
+  return newFace;
+}
 
 /*********************************************************************
  * _createArray2D

@@ -140,6 +140,8 @@ typedef struct
 /*******************
  * Functions
  */
+/* New Functions for Initializaition of objects VJ_Face, KLT_FaceList */
+VJ_Face VJCreateFace(int startX, int startY, int width, int height);
 
 /* Create */
 KLT_TrackingContext KLTCreateTrackingContext(void);
