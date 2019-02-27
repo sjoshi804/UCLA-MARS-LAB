@@ -53,18 +53,60 @@ extern int KLT_verbose;
  * height = height of bounding box
  * 
  * RETURNS: 
- * VJ_Face object initialized with the aforementioned values and an empty features vector
- */
+ * VJ_Face object initialized with the aforementioned values and a features pointer is a nullptr */
 //TODO: Check whether rectange specifies width/height or limits
 VJ_Face VJCreateFace(int startX, int startY, int width, int height)
 {
   VJ_Face newFace;
+  printf("Initialization completed correctly\n");
   newFace.startX = startX;
-  newFace.startY = height + startY;
+  newFace.startY = startY;
   newFace.limitX = width + startX;
+  newFace.limitY = height + startY;
   return newFace;
 }
 
+/*********************************************************************
+ * KLTCreateFaceList
+ * INPUTS
+ * nFaces // number of faces
+ * 
+ * RETURNS: 
+ * Pointer to KLT_Face
+ */
+KLT_FaceList KLTCreateFaceList(int nFaces)
+{
+  KLT_FaceList faces;
+  faces.nFaces = nFaces;
+  faces.faceList = (VJ_Face*) malloc(sizeof(VJ_Face) * faces.nFaces);
+  return faces;
+}
+
+/*********************************************************************
+ * printFeatures
+ * INPUTS
+ * a KLTFaceList object
+ * 
+ * OUTPUT: 
+ * Prints features corresponding to each face
+ * 
+ * RETURNS: 
+ * Nothing
+ */
+void printFeatures(KLT_FaceList *faceList)
+{
+  return;
+  /*
+  int i, j;
+  printf("\n(KLT) Printing features corresponding to each face\n\n");
+  for (i = 0; i < faceList->nFaces; i++)
+  {
+    printf("Face %d:\n", i);
+    for (int j = 0; j < faceList->faceList[i].nFeatures; j++)
+      printf("Feature %d\n", faceList->faceList[i].features->values[j]);
+    printf("\n");
+  }*/
+}
 /*********************************************************************
  * _createArray2D
  *

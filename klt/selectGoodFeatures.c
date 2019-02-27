@@ -221,8 +221,10 @@ static void _enforceMinimumDistance(
        eigenvalue is large enough, then add feature to the current list */
     if (!featuremap[y*ncols+x] && val >= min_eigenvalue)  {
       /* Match feature number i.e. index of feature to face */
-      //Add it to the vector features
-      VECTOR_PUSH_BACK(faces->faceList[correspondingFace].features, indx);
+      //Add it to the features array
+      //FIXME: TODO:
+      printf("(Debug) %d<-%d\n", correspondingFace, indx);
+      featurelist->feature[indx]->correspondingFace = correspondingFace;
       featurelist->feature[indx]->x   = (KLT_locType) x;
       featurelist->feature[indx]->y   = (KLT_locType) y;
       featurelist->feature[indx]->val = (int) val;

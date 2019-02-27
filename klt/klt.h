@@ -33,12 +33,12 @@ typedef unsigned char KLT_PixelType;
 #define KLT_LARGE_RESIDUE    -5
 
 #include "klt_util.h" /* for affine mapping */
-#include "vector.h" /* custom vector implementation */
 
 /*******************
  * Structures
  */
 
+/*******************************************************/
 typedef struct  {
   /* Available to user */
   int mindist;			/* min distance b/w features */
@@ -93,7 +93,8 @@ typedef struct  {
 typedef struct  {
   KLT_locType x;
   KLT_locType y;
-  int val;	
+  int val;
+  int correspondingFace;
   /* for affine mapping */
   _KLT_FloatImage aff_img; 
   _KLT_FloatImage aff_img_gradx;
@@ -124,7 +125,6 @@ typedef struct  {
 
 typedef struct
 {
-  VECTOR_OF(int) features;
   int startX;
   int startY;
   int limitX;
@@ -137,11 +137,15 @@ typedef struct
   VJ_Face* faceList;
 } KLT_FaceList;
 
+
 /*******************
  * Functions
  */
-/* New Functions for Initializaition of objects VJ_Face, KLT_FaceList */
+
+/* New Functions for manipulating objects VJ_Face, KLT_FaceList */
 VJ_Face VJCreateFace(int startX, int startY, int width, int height);
+KLT_FaceList KLTCreateFaceList(int nFaces);
+void printFeatures(KLT_FaceList *faceList);
 
 /* Create */
 KLT_TrackingContext KLTCreateTrackingContext(void);
