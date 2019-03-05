@@ -19,7 +19,7 @@ int main()
   KLT_FeatureHistory fh;
   KLT_FeatureTable ft;
   int i;
-
+  
   ft = KLTReadFeatureTable(NULL, "features.txt");
   fl = KLTCreateFeatureList(ft->nFeatures);
   KLTExtractFeatureList(fl, ft, 1);

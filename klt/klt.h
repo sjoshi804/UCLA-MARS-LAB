@@ -31,6 +31,7 @@ typedef unsigned char KLT_PixelType;
 #define KLT_MAX_ITERATIONS   -3
 #define KLT_OOB              -4
 #define KLT_LARGE_RESIDUE    -5
+#define DEBUG_AFFINE_MAPPING
 
 #include "klt_util.h" /* for affine mapping */
 

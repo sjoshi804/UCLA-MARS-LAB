@@ -21,6 +21,7 @@ extern int KLT_verbose;
 
 typedef float *_FloatWindow;
 
+
 /*********************************************************************
  * _interpolate
  * 
@@ -942,8 +943,7 @@ static void _am_compute4by1ErrorVector(
  */
 
 /* if you enalbe the DEBUG_AFFINE_MAPPING make sure you have created a directory "./debug" */
-/* #define DEBUG_AFFINE_MAPPING */
-
+ 
 #ifdef DEBUG_AFFINE_MAPPING
 static int counter = 0;
 static int glob_index = 0;
@@ -1057,7 +1057,6 @@ static int _am_trackFeatureAffine(
       
     }else{
       /* affine tracker */
-      
       float ul_x =  *Axx * (-hw) + *Axy *   hh  + *x2;  /* upper left corner */
       float ul_y =  *Ayx * (-hw) + *Ayy *   hh  + *y2; 
       float ll_x =  *Axx * (-hw) + *Axy * (-hh) + *x2;  /* lower left corner */
@@ -1344,7 +1343,6 @@ void KLTTrackFeatures(
 
 		/* Only track features that are not lost */
 		if (featurelist->feature[indx]->val >= 0)  {
-
 			xloc = featurelist->feature[indx]->x;
 			yloc = featurelist->feature[indx]->y;
 

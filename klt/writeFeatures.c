@@ -96,7 +96,7 @@ static FILE* _printSetupTxt(
   char *type)	/* Output: either 'f' or 'd', based on input format */
 {
   FILE *fp;
-  const int val_width = 5;
+  const int val_width = 2;
   int i;
 
   /* Either open file or use stderr */
@@ -114,8 +114,8 @@ static FILE* _printSetupTxt(
     KLTError("(KLTWriteFeatures) Format must end in 'f' or 'd'.");
 
   /* Construct feature format */
-  sprintf(format, "(%s,%s)=%%%dd ", fmt, fmt, val_width);
-     
+  //sprintf(format, "%s (%s,%s)=%%%dd", fmt, fmt, fmt, val_width);
+  sprintf(format, "(%s,%s)=%%%dd", fmt, fmt, val_width);
   return fp;
 }
 
@@ -278,14 +278,14 @@ static void _printFeatureTxt(
   assert(type == 'f' || type == 'd');
 
   if (type == 'f')
-    fprintf(fp, format, (float) feat->x, (float) feat->y, feat->val);
+    fprintf(fp, format, /*(float)feat->correspondingFace,*/ (float) feat->x, (float) feat->y, feat->val);
   else if (type == 'd')  {
     /* Round x & y to nearest integer, unless negative */
     float x = feat->x;
     float y = feat->y;
     if (x >= 0.0) x += 0.5;
     if (y >= 0.0) y += 0.5;
-    fprintf(fp, format, 
+    fprintf(fp, format, /*feat->correspondingFace, */ 
             (int) x, (int) y, feat->val);
   }
 }

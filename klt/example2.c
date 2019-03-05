@@ -22,17 +22,21 @@ int main()
 
   tc = KLTCreateTrackingContext();
   fl = KLTCreateFeatureList(nFeatures);
-
+  KLT_FaceList faces = KLTCreateFaceList(2);
+  VJ_Face face1 = VJCreateFace(10, 10, 100, 100);
+  VJ_Face face2 = VJCreateFace(110, 110, 100, 100);
+  faces.faceList[0] = face1;
+  faces.faceList[1] = face2;
   img1 = pgmReadFile("img0.pgm", NULL, &ncols, &nrows);
   img2 = pgmReadFile("img1.pgm", NULL, &ncols, &nrows);
 
-  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl, NULL);
+  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl, &faces);
 
   KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, "feat1.ppm");
   KLTWriteFeatureList(fl, "feat1.txt", "%3d");
 
   KLTTrackFeatures(tc, img1, img2, ncols, nrows, fl);
-  KLTReplaceLostFeatures(tc, img2, ncols, nrows, fl, NULL);
+  KLTReplaceLostFeatures(tc, img2, ncols, nrows, fl, &faces);
 
   KLTWriteFeatureListToPPM(fl, img2, ncols, nrows, "feat2.ppm");
   KLTWriteFeatureList(fl, "feat2.txt", "%3d");

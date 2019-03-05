@@ -222,8 +222,6 @@ static void _enforceMinimumDistance(
     if (!featuremap[y*ncols+x] && val >= min_eigenvalue)  {
       /* Match feature number i.e. index of feature to face */
       //Add it to the features array
-      //FIXME: TODO:
-      printf("(Debug) %d<-%d\n", correspondingFace, indx);
       featurelist->feature[indx]->correspondingFace = correspondingFace;
       featurelist->feature[indx]->x   = (KLT_locType) x;
       featurelist->feature[indx]->y   = (KLT_locType) y;
@@ -407,6 +405,12 @@ void _KLTSelectGoodFeatures(
     /* For most of the pixels in the image, do ... */
     ptr = pointlist;
     //Set bounds for tracking based on face boundaries
+    if (faces == NULL)
+    {
+      fprintf(stderr, "Face list provided is empty\n");
+      return;
+    }
+
     for (i = 0; i < faces->nFaces; i++)
     {
       VJ_Face currentFace = faces->faceList[i];

@@ -27,16 +27,20 @@ int main()
 
   img1 = pgmReadFile("img0.pgm", NULL, &ncols, &nrows);
   img2 = pgmReadFile("img1.pgm", NULL, &ncols, &nrows);
-
-  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl, NULL);
+  KLT_FaceList faces = KLTCreateFaceList(2);
+  VJ_Face face1 = VJCreateFace(10, 10, 100, 100);
+  VJ_Face face2 = VJCreateFace(110, 110, 100, 100);
+  faces.faceList[0] = face1;
+  faces.faceList[1] = face2;
+  KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl, &faces);
 
   printf("\nIn first image:\n");
   for (i = 0 ; i < fl->nFeatures ; i++)  {
-    printf("Feature #%d:  (%f,%f) with value of %d\n",
-           i, fl->feature[i]->x, fl->feature[i]->y,
+    printf("Feature #%d belongs to Face #%d:  (%f,%f) with value of %d\n",
+           i, fl->feature[i]->correspondingFace, fl->feature[i]->x, fl->feature[i]->y,
            fl->feature[i]->val);
   }
-
+  
   KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, "feat1.ppm");
   KLTWriteFeatureList(fl, "feat1.txt", "%3d");
 
@@ -44,8 +48,8 @@ int main()
 
   printf("\nIn second image:\n");
   for (i = 0 ; i < fl->nFeatures ; i++)  {
-    printf("Feature #%d:  (%f,%f) with value of %d\n",
-           i, fl->feature[i]->x, fl->feature[i]->y,
+    printf("Feature #%d belongs to Face #%d:  (%f,%f) with value of %d\n",
+           i, fl->feature[i]->correspondingFace, fl->feature[i]->x, fl->feature[i]->y,
            fl->feature[i]->val);
   }
 

@@ -81,32 +81,6 @@ KLT_FaceList KLTCreateFaceList(int nFaces)
   faces.faceList = (VJ_Face*) malloc(sizeof(VJ_Face) * faces.nFaces);
   return faces;
 }
-
-/*********************************************************************
- * printFeatures
- * INPUTS
- * a KLTFaceList object
- * 
- * OUTPUT: 
- * Prints features corresponding to each face
- * 
- * RETURNS: 
- * Nothing
- */
-void printFeatures(KLT_FaceList *faceList)
-{
-  return;
-  /*
-  int i, j;
-  printf("\n(KLT) Printing features corresponding to each face\n\n");
-  for (i = 0; i < faceList->nFaces; i++)
-  {
-    printf("Face %d:\n", i);
-    for (int j = 0; j < faceList->faceList[i].nFeatures; j++)
-      printf("Feature %d\n", faceList->faceList[i].features->values[j]);
-    printf("\n");
-  }*/
-}
 /*********************************************************************
  * _createArray2D
  *
