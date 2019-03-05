@@ -41,8 +41,8 @@
 #include "stdio-wrapper.h"
 #include "haar.h"
 
-#define INPUT_FILENAME "frame2.pgm"
-#define OUTPUT_FILENAME "oframe2.pgm"
+#define INPUT_FILENAME "frame0.pgm"
+#define OUTPUT_FILENAME "newOutput00.pgm"
 #define FACE_BOUNDARIES_FILENAME "FaceBoundaries.txt"
 
 using namespace std;

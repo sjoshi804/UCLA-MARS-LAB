@@ -31,31 +31,30 @@ int main()
   tc = KLTCreateTrackingContext();
   fl = KLTCreateFeatureList(nFeatures);
   ft = KLTCreateFeatureTable(nFrames, nFeatures);
-  tc->affineConsistencyCheck = 2; 
+  //tc->affineConsistencyCheck = 2; 
   tc->sequentialMode = TRUE;
   tc->writeInternalImages = FALSE;
   tc->affineConsistencyCheck = 2;  /* set this to 2 to turn on affine consistency check */
-  KLT_FaceList faces = KLTCreateFaceList(2);
-  VJ_Face face1 = VJCreateFace(220, 92, 36, 36);
-  VJ_Face face2 = VJCreateFace(76, 83, 43, 43);
+  KLT_FaceList faces = KLTCreateFaceList(1);
+  VJ_Face face1 = VJCreateFace(244, 82, 44, 44);
   faces.faceList[0] = face1;
-  faces.faceList[1] = face2;
-  img1 = pgmReadFile("demo1.pgm", NULL, &ncols, &nrows);
+  img1 = pgmReadFile("frame0.pgm", NULL, &ncols, &nrows);
   img2 = (unsigned char *) malloc(ncols*nrows*sizeof(unsigned char));
 
   KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl, &faces);
   KLTStoreFeatureList(fl, ft, 0);
-  KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, "oframe1.ppm");
+  KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, "noReplacenewOutput0.ppm");
 
-  for (i = 2 ; i < nFrames ; i++)  {
-    sprintf(fnamein, "demo%d.pgm", i);
+  for (i = 1 ; i < nFrames ; i++)  {
+    sprintf(fnamein, "frame%d0.pgm", i);
     pgmReadFile(fnamein, img2, &ncols, &nrows);
     KLTTrackFeatures(tc, img1, img2, ncols, nrows, fl);
 #ifdef REPLACE
-    KLTReplaceLostFeatures(tc, img2, ncols, nrows, fl, &faces);
+    if (i % 3 == 0)
+      KLTReplaceLostFeatures(tc, img2, ncols, nrows, fl, &faces);
 #endif
     KLTStoreFeatureList(fl, ft, i);
-    sprintf(fnameout, "oframe%d.ppm", i);
+    sprintf(fnameout, "noReplacenewOutput%d.pgm", i);
     KLTWriteFeatureListToPPM(fl, img2, ncols, nrows, fnameout);
   }
   KLTWriteFeatureTable(ft, "features.txt", "%5.1f");

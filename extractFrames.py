@@ -1,14 +1,14 @@
 import numpy as np
 import cv2
 
-cap = cv2.VideoCapture('../oldFaceFootage.mp4')
+cap = cv2.VideoCapture('../newStockFaceFootage.mp4')
 count = 0
 while (cap.isOpened()):
 	ret, frame = cap.read()
 	if not ret:
 		break
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-	crop = gray[0:720, 160:1120]
+	crop = gray #[240:480, 480:900]
 	final = cv2.resize(crop, (320, 240), interpolation=cv2.INTER_AREA)
 	#cv2.imshow('frame',final)
 	name = 'frame' + str(count) + '.pgm'
