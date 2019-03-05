@@ -41,8 +41,8 @@
 #include "stdio-wrapper.h"
 #include "haar.h"
 
-#define INPUT_FILENAME "Face.pgm"
-#define OUTPUT_FILENAME "Output.pgm"
+#define INPUT_FILENAME "frame2.pgm"
+#define OUTPUT_FILENAME "oframe2.pgm"
 #define FACE_BOUNDARIES_FILENAME "FaceBoundaries.txt"
 
 using namespace std;
@@ -68,7 +68,7 @@ int main (int argc, char *argv[])
 	MyImage imageObj;
 	MyImage *image = &imageObj;
 
-	flag = readPgm((char *)"Face.pgm", image);
+	flag = readPgm((char *)INPUT_FILENAME, image);
 	if (flag == -1)
 	{
 		printf( "Unable to open input image\n");
@@ -104,11 +104,11 @@ int main (int argc, char *argv[])
 		fprintf(stderr, "Error opening file: %d", errno);
 		exit(1);
 	}
-
+	printf("Faces detected: %d", (int) result.size());
 	for(i = 0; i < result.size(); i++ )
 	{
 		MyRect r = result[i];
-		dprintf(faceBoundary_FD, "Face %d: starts at (%d, %d), width = %d, height = %d\n", i, r.x, r.y, r.width, r.height);
+		printf("\nFace %d: starts at (%d, %d), width = %d, height = %d\n", i, r.x, r.y, r.width, r.height);
 		drawRectangle(image, r);
 	}
 

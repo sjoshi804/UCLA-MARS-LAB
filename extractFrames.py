@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-cap = cv2.VideoCapture('../stockFaceFootage.mp4')
+cap = cv2.VideoCapture('../oldFaceFootage.mp4')
 count = 0
 while (cap.isOpened()):
 	ret, frame = cap.read()
