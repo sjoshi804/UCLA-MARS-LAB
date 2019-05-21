@@ -50,7 +50,7 @@ using namespace std;
 
 int main (int argc, char *argv[]) 
 {
-
+	printf("This is c code\n");
 	int flag;
 	
 	int mode = 1;

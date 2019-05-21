@@ -1,4 +1,4 @@
-GCC ?= g++
+GCC ?= gcc
 
 HEADERS := image.h haar.h stdio-wrapper.h
 

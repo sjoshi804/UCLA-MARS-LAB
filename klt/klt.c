@@ -54,7 +54,7 @@ extern int KLT_verbose;
  * 
  * RETURNS: 
  * VJ_Face object initialized with the aforementioned values and a features pointer is a nullptr */
-//TODO: Check whether rectange specifies width/height or limits
+// Check whether rectange specifies width/height or limits
 VJ_Face VJCreateFace(int startX, int startY, int width, int height)
 {
   VJ_Face newFace;

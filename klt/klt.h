@@ -90,7 +90,7 @@ typedef struct  {
   void *pyramid_last_grady;
 }  KLT_TrackingContextRec, *KLT_TrackingContext;
 
-
+//Added Corresponding Face Field
 typedef struct  {
   KLT_locType x;
   KLT_locType y;
